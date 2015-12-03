@@ -1,33 +1,61 @@
 {
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "analysis": {
+      "filter": {
+        "three_or_more_ngram": {
+          "type": "ngram",
+          "min_gram": 3,
+          "max_gram": 256
+        }
+      },
+      "analyzer": {
+        "default_index": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "three_or_more_ngram"
+          ]
+        },
+        "default_search": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "standard",
+            "lowercase"
+          ]
+        }
+      }
+    }
+  },
   "mappings": {
-    "work": {
+    "person": {
       "properties": {
+        "name": {
+          "type": "string"
+        },
+        "birth": {
+          "type": "string",
+          "index": "no"
+        },
+        "death": {
+          "type": "string",
+          "index": "no"
+        },
+        "nationality": {
+          "type": "string",
+          "index": "no"
+        },
         "work": {
+          "type": "nested",
           "properties": {
-            "creator": {
-              "type": "nested",
-              "properties": {
-                "uri": {
-                  "type": "string",
-                  "index": "no"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "birth": {
-                  "type": "string",
-                  "index": "no"
-                },
-                "death": {
-                  "type": "string",
-                  "index": "no"
-                }
-              }
+            "uri": {
+              "type": "string",
+              "index": "no"
             },
             "title": {
-              "type": "string"
-            },
-            "uri": {
               "type": "string",
               "index": "no"
             },
@@ -38,40 +66,39 @@
           }
         }
       }
-    }
-  },
-  "person": {
-    "properties": {
-      "name": {
-        "type": "string"
-      },
-      "birth": {
-        "type": "string",
-        "index": "no"
-      },
-      "death": {
-        "type": "string",
-        "index": "no"
-      },
-      "nationality": {
-        "type": "string",
-        "index": "no"
-      },
-      "work": {
-        "type": "nested",
-        "properties": {
-          "uri": {
-            "type": "string",
-            "index": "no"
-          },
-          "title": {
-            "type": "string",
-            "index": "no"
-          },
-          "year": {
-            "type": "string",
-            "index": "no"
+    },
+    "work": {
+      "properties": {
+        "creator": {
+          "type": "nested",
+          "properties": {
+            "uri": {
+              "type": "string",
+              "index": "no"
+            },
+            "name": {
+              "type": "string"
+            },
+            "birth": {
+              "type": "string",
+              "index": "no"
+            },
+            "death": {
+              "type": "string",
+              "index": "no"
+            }
           }
+        },
+        "title": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string",
+          "index": "no"
+        },
+        "year": {
+          "type": "string",
+          "index": "no"
         }
       }
     }
