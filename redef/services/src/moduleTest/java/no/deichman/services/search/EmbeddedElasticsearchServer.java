@@ -9,13 +9,14 @@ import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.http.HttpStatus;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.indices.IndexAlreadyExistsException;
 import org.elasticsearch.node.Node;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
@@ -28,26 +29,24 @@ public class EmbeddedElasticsearchServer {
     private Node node;
 
     public EmbeddedElasticsearchServer() {
-        this(DEFAULT_DATA_DIRECTORY);
+        this(getTempDirectory());
+        //this(DEFAULT_DATA_DIRECTORY);
     }
 
     public EmbeddedElasticsearchServer(String dataDirectory) {
         this.dataDirectory = dataDirectory;
-        deleteDataDirectory();
 
-        new File(dataDirectory).mkdirs();
+        //new File(dataDirectory).mkdirs();
         Settings.Builder elasticsearchSettings;
         elasticsearchSettings = Settings.settingsBuilder()
                 .put("http.enabled", "true")
                 .put("path.home", ".")
                 .put("path.data", dataDirectory);
 
-        try {
-            startNode(elasticsearchSettings);
-        } catch (IndexAlreadyExistsException e) {
-            deleteDataDirectory();
-            startNode(elasticsearchSettings);
-        }
+        node = nodeBuilder()
+                .local(true)
+                .settings(elasticsearchSettings.build())
+                .node();
 
         StringWriter writer = new StringWriter();
         try {
@@ -57,21 +56,22 @@ public class EmbeddedElasticsearchServer {
         }
 
         try {
-            Unirest.delete("http://127.0.0.1:9200/*");
             HttpResponse<JsonNode> response = Unirest.post("http://127.0.0.1:9200/search").body(writer.toString()).asJson();
             if (response.getStatus() != HttpStatus.OK_200) {
-                throw new RuntimeException("Unexpected status from ElasticSearch: " + response.getBody().toString());
+                throw new RuntimeException("Unexpected status from Elasticsearch: " + response.getBody().toString());
             }
         } catch (UnirestException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void startNode(Settings.Builder elasticsearchSettings) {
-        node = nodeBuilder()
-                .local(true)
-                .settings(elasticsearchSettings.build())
-                .node();
+    public static String getTempDirectory() {
+        try {
+            Path tempDir = Files.createTempDirectory("elasticsearch-data");
+            return tempDir.toAbsolutePath().toString();
+        } catch (IOException e1) {
+            throw new RuntimeException("Could not create temp directory for embedded Elasticsearch");
+        }
     }
 
     public final Client getClient() {
@@ -90,5 +90,4 @@ public class EmbeddedElasticsearchServer {
             throw new RuntimeException("Could not delete data directory of embedded elasticsearch server", e);
         }
     }
-
 }

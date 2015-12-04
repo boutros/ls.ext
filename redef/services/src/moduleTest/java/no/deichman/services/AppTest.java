@@ -49,12 +49,6 @@ import static org.junit.Assert.assertTrue;
 
 public class AppTest {
     public static final int ONE_SECOND = 1000;
-    public static final int ZERO = 0;
-    public static final int ONE = 1;
-    public static final int TWO = 2;
-    public static final int THREE = 3;
-    public static final int FOUR = 4;
-    public static final int FIVE = 5;
     public static final int TEN_TIMES = 10;
     private static final Logger LOG = LoggerFactory.getLogger(AppTest.class);
     private static final boolean USE_IN_MEMORY_REPO = true;

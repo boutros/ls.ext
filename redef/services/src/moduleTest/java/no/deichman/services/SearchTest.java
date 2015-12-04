@@ -43,11 +43,6 @@ public class SearchTest {
 
     private static void setupElasticSearch() throws Exception {
         embeddedElasticsearchServer = new EmbeddedElasticsearchServer();
-        //Settings indexSettings = Settings.settingsBuilder()
-        //        .put("number_of_shards", 1)
-        //        .build();
-        //CreateIndexRequest indexRequest = new CreateIndexRequest("search", indexSettings);
-        //embeddedElasticsearchServer.getClient().admin().indices().create(indexRequest).actionGet();
     }
 
     private static String generateWorkJson(String title, String creator) {
@@ -120,10 +115,12 @@ public class SearchTest {
 
     @Test
     public void return_hits_when_three_or_more_characters_in_a_word_matches() throws InterruptedException, UnirestException {
-        com.google.gson.JsonArray results = searchDocument("work", "cow", THREE);
+        com.google.gson.JsonArray results = searchDocument("work", "cow", FOUR);
         assertJsonSimilar(results.get(ZERO).toString(), generateWorkJson("Apocalypse Cow", null));
-        assertJsonSimilar(results.get(ONE).toString(), generateWorkJson("Know Your Cows", null));
-        assertJsonSimilar(results.get(TWO).toString(), generateWorkJson("Of Cowards and True Men", null));
+        assertJsonSimilar(results.get(ONE).toString(), generateWorkJson("Cow", null));
+        assertJsonSimilar(results.get(TWO).toString(), generateWorkJson("Know Your Cows", null));
+        assertJsonSimilar(results.get(THREE).toString(), generateWorkJson("Of Cowards and True Men", null));
+
     }
 
     @Test
@@ -149,7 +146,7 @@ public class SearchTest {
 
     @Test
     public void return_hits_with_words_that_match_three_or_more_characters_in_order() throws InterruptedException, UnirestException {
-        com.google.gson.JsonArray results = searchDocument("work", "cow", THREE);
+        com.google.gson.JsonArray results = searchDocument("work", "cow", FOUR);
         assertJsonSimilar(results.get(ZERO).toString(), generateWorkJson("Cow", null));
         assertJsonSimilar(results.get(ONE).toString(), generateWorkJson("Apocalypse Cow", null));
         assertJsonSimilar(results.get(TWO).toString(), generateWorkJson("Know Your Cows", null));
