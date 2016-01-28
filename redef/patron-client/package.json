@@ -11,11 +11,11 @@
   ],
   "scripts": {
     "start": "node server/server.js",
-    "test": "mocha test module-test --timeout 5000",
+    "test": "mocha --require babel-core/register test module-test --timeout 5000",
     "start-dev": "nodemon",
     "start-dev-debug": "nodemon debug",
-    "test-debug": "mocha debug",
-    "module-test-debug": "mocha debug module-test",
+    "test-debug": "mocha --require babel-core/register debug",
+    "module-test-debug": "mocha --require babel-core/register debug module-test",
     "jscs": "jscs",
     "jshint": "jshint",
     "build": ""
@@ -44,17 +44,21 @@
     "ractive-events-keys": "0.2.1"
   },
   "devDependencies": {
-    "browserify": "^11.2.0",
+    "browserify": "^13.0.0",
     "chai": "*",
     "del": "^2.0.2",
     "jscs": "*",
     "jshint": "*",
+    "jsdom": "*",
     "mocha": "*",
     "mocha-jsdom": "*",
     "nodemon": "*",
     "sinon": "*",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "babel-core": "^6.4.5",
+    "babel-preset-es2015": "^6.3.13",
+    "babelify": "7.2.0"
   },
   "private": true,
   "analyze": true,

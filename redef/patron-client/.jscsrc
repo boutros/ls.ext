@@ -8,5 +8,6 @@
   "requireVarDeclFirst": null,
   "validateIndentation": 2,
   "requireMultipleVarDecl": null,
-  "disallowDanglingUnderscores": false
+  "disallowDanglingUnderscores": false,
+  "esnext": true
 }

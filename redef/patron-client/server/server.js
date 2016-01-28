@@ -2,15 +2,17 @@
 "use strict";
 
 var express = require('express'),
-    path = require('path'),
-    config = require('./lib/config'),
-    graph = require('ld-graph'),
-    url = require('url'),
-    app = express(),
-    browserify = require('browserify-middleware'),
-    Server;
+  path = require('path'),
+  config = require('./lib/config'),
+  graph = require('ld-graph'),
+  url = require('url'),
+  app = express(),
+  browserify = require('browserify-middleware'),
+  babelify = require('babelify'),
+  Server;
 
-browserify.settings.development("basedir",  "./");
+browserify.settings.development("basedir", "./");
+browserify.settings("transform", [[babelify, {presets: ["es2015"]}]]);
 app.use(express.static(path.join(__dirname, '/../public')));
 
 app.get('/js/bundle.js', browserify([
@@ -47,6 +49,6 @@ app.get('/version', function (request, response) {
 
 Server = app.listen(process.env.BIND_PORT || 8000, process.env.BIND_IP, function () {
   var host = Server.address().address,
-      port = Server.address().port;
+    port = Server.address().port;
   console.log('Server listening at http://%s:%s', host, port);
 });

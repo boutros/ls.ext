@@ -5,10 +5,10 @@
   "author": "Digital Development Team at Oslo Public Library <digibib@gmail.com>",
   "scripts": {
     "start": "node server/server.js",
-    "test": "mocha module-test --timeout 5000",
+    "test": "mocha --require babel-core/register module-test --timeout 5000",
     "start-dev": "NODE_ENV=development nodemon -L",
     "start-dev-debug": "nodemon debug",
-    "module-test-debug": "mocha debug module-test",
+    "module-test-debug": "mocha --require babel-core/register  debug module-test",
     "jscs": "jscs",
     "jshint": "jshint"
   },
@@ -56,7 +56,10 @@
     "mocha": "*",
     "jsdom": "^7.2.2",
     "nodemon": "*",
-    "sinon": "*"
+    "sinon": "*",
+    "babel-core": "^6.4.5",
+    "babel-preset-es2015": "^6.3.13",
+    "babelify": "7.2.0"
   },
   "private": true,
   "analyze": true,

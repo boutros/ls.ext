@@ -1,23 +1,18 @@
 /*global require, it, describe, before, after, document, Promise*/
-"use strict";
-
-var chai = require("chai"),
-    expect = chai.expect,
-    sinon = require("sinon"),
-    axios = require("axios"),
-    fs = require("fs"),
-    jsdom = require("mocha-jsdom");
+import Search from '../client/src/search';
+import chai from 'chai';
+var expect = chai.expect;
+import sinon from 'sinon';
+import axios from 'axios';
+import fs from 'fs';
+import jsdom from 'mocha-jsdom';
 
 describe("PatronClient", function () {
   describe("/search", function () {
     jsdom();
-    var ractive, Search;
+    var ractive;
 
     before(function (done) {
-
-      // load module
-      Search = require("../client/src/search.js");
-
       // stub http requests from axios used in module, faking returned promises
       sinon.stub(axios, "get", function (path) {
         switch (path) {

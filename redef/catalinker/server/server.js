@@ -4,6 +4,8 @@ var logger = require('morgan');
 var browserify = require('browserify-middleware');
 var axios = require('axios');
 var compileSass = require('express-compile-sass');
+var babelify = require('babelify');
+browserify.settings("transform", [[babelify, {presets: ["es2015"]}]]);
 var app = express();
 if (app.get('env') === 'development') {
   var livereload = require('express-livereload');
